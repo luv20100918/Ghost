@@ -260,5 +260,22 @@ describe('Vehicles API (Canary)', function () {
                 should.equal(result, null);
             });
         });
+
+        it('should return null after successful destroy', function () {
+            sinon.stub(models.Vehicle, 'destroy').resolves();
+
+            const frame = {
+                options: {id: 'vehicle-id-2'}
+            };
+
+            return vehiclesController.destroy.query(frame).then(function (result) {
+                should.strictEqual(result, null);
+            });
+        });
+
+        it('should have statusCode 204 and cacheInvalidate true', function () {
+            vehiclesController.destroy.statusCode.should.equal(204);
+            vehiclesController.destroy.headers.cacheInvalidate.should.be.true();
+        });
     });
 });

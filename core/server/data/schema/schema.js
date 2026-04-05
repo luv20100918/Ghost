@@ -556,5 +556,123 @@ module.exports = {
         created_by: {type: 'string', maxlength: 24, nullable: false},
         updated_at: {type: 'dateTime', nullable: true},
         updated_by: {type: 'string', maxlength: 24, nullable: true}
+    },
+    vehicle_categories: {
+        id: {type: 'string', maxlength: 24, nullable: false, primary: true},
+        name: {type: 'string', maxlength: 191, nullable: false},
+        slug: {type: 'string', maxlength: 191, nullable: false, unique: true},
+        description: {type: 'text', maxlength: 65535, nullable: true},
+        image: {type: 'string', maxlength: 2000, nullable: true},
+        created_at: {type: 'dateTime', nullable: false},
+        created_by: {type: 'string', maxlength: 24, nullable: false},
+        updated_at: {type: 'dateTime', nullable: true},
+        updated_by: {type: 'string', maxlength: 24, nullable: true}
+    },
+    vehicles: {
+        id: {type: 'string', maxlength: 24, nullable: false, primary: true},
+        uuid: {type: 'string', maxlength: 36, nullable: false, validations: {isUUID: true}},
+        name: {type: 'string', maxlength: 191, nullable: false},
+        slug: {type: 'string', maxlength: 191, nullable: false, unique: true},
+        description: {type: 'text', maxlength: 65535, nullable: true},
+        category_id: {type: 'string', maxlength: 24, nullable: false, references: 'vehicle_categories.id'},
+        make: {type: 'string', maxlength: 100, nullable: false},
+        model: {type: 'string', maxlength: 100, nullable: false},
+        year: {type: 'integer', nullable: false, unsigned: true},
+        color: {type: 'string', maxlength: 50, nullable: true},
+        license_plate: {type: 'string', maxlength: 50, nullable: false, unique: true},
+        vin: {type: 'string', maxlength: 50, nullable: true, unique: true},
+        mileage: {type: 'integer', nullable: false, unsigned: true, defaultTo: 0},
+        fuel_type: {
+            type: 'string', maxlength: 50, nullable: false, defaultTo: 'gasoline', validations: {
+                isIn: [['gasoline', 'diesel', 'electric', 'hybrid']]
+            }
+        },
+        seats: {type: 'integer', nullable: false, unsigned: true, defaultTo: 5},
+        transmission: {
+            type: 'string', maxlength: 50, nullable: false, defaultTo: 'automatic', validations: {
+                isIn: [['automatic', 'manual']]
+            }
+        },
+        daily_rate: {type: 'integer', nullable: false},
+        feature_image: {type: 'string', maxlength: 2000, nullable: true},
+        gallery_images: {type: 'text', maxlength: 65535, nullable: true},
+        features: {type: 'text', maxlength: 65535, nullable: true},
+        status: {
+            type: 'string', maxlength: 50, nullable: false, defaultTo: 'available', validations: {
+                isIn: [['available', 'rented', 'maintenance', 'retired']]
+            }
+        },
+        location: {type: 'string', maxlength: 500, nullable: true},
+        created_at: {type: 'dateTime', nullable: false},
+        created_by: {type: 'string', maxlength: 24, nullable: false},
+        updated_at: {type: 'dateTime', nullable: true},
+        updated_by: {type: 'string', maxlength: 24, nullable: true}
+    },
+    vehicle_reservations: {
+        id: {type: 'string', maxlength: 24, nullable: false, primary: true},
+        uuid: {type: 'string', maxlength: 36, nullable: false, validations: {isUUID: true}},
+        vehicle_id: {type: 'string', maxlength: 24, nullable: false, references: 'vehicles.id'},
+        member_id: {type: 'string', maxlength: 24, nullable: false, references: 'members.id'},
+        status: {
+            type: 'string', maxlength: 50, nullable: false, defaultTo: 'pending', validations: {
+                isIn: [['pending', 'confirmed', 'active', 'returned', 'completed', 'cancelled']]
+            }
+        },
+        pickup_date: {type: 'dateTime', nullable: false},
+        return_date: {type: 'dateTime', nullable: false},
+        actual_return_date: {type: 'dateTime', nullable: true},
+        pickup_location: {type: 'string', maxlength: 500, nullable: true},
+        return_location: {type: 'string', maxlength: 500, nullable: true},
+        daily_rate: {type: 'integer', nullable: false},
+        total_amount: {type: 'integer', nullable: false},
+        currency: {type: 'string', maxlength: 3, nullable: false, defaultTo: 'usd'},
+        discount_amount: {type: 'integer', nullable: true, defaultTo: 0},
+        stripe_payment_intent_id: {type: 'string', maxlength: 255, nullable: true},
+        notes: {type: 'text', maxlength: 65535, nullable: true},
+        created_at: {type: 'dateTime', nullable: false},
+        created_by: {type: 'string', maxlength: 24, nullable: false},
+        updated_at: {type: 'dateTime', nullable: true},
+        updated_by: {type: 'string', maxlength: 24, nullable: true}
+    },
+    vehicle_reservation_events: {
+        id: {type: 'string', maxlength: 24, nullable: false, primary: true},
+        reservation_id: {type: 'string', maxlength: 24, nullable: false, references: 'vehicle_reservations.id', cascadeDelete: true},
+        event_type: {type: 'string', maxlength: 50, nullable: false},
+        details: {type: 'text', maxlength: 65535, nullable: true},
+        created_at: {type: 'dateTime', nullable: false}
+    },
+    vehicle_pricing_rules: {
+        id: {type: 'string', maxlength: 24, nullable: false, primary: true},
+        category_id: {type: 'string', maxlength: 24, nullable: true, references: 'vehicle_categories.id'},
+        vehicle_id: {type: 'string', maxlength: 24, nullable: true, references: 'vehicles.id'},
+        name: {type: 'string', maxlength: 191, nullable: false},
+        rule_type: {
+            type: 'string', maxlength: 50, nullable: false, validations: {
+                isIn: [['season', 'duration', 'membership', 'promotion']]
+            }
+        },
+        multiplier: {type: 'string', maxlength: 20, nullable: true, defaultTo: '1.0'},
+        discount_percent: {type: 'integer', nullable: true, defaultTo: 0},
+        start_date: {type: 'dateTime', nullable: true},
+        end_date: {type: 'dateTime', nullable: true},
+        min_days: {type: 'integer', nullable: true},
+        max_days: {type: 'integer', nullable: true},
+        member_status: {type: 'string', maxlength: 50, nullable: true},
+        is_active: {type: 'bool', nullable: false, defaultTo: true},
+        priority: {type: 'integer', nullable: false, unsigned: true, defaultTo: 0},
+        created_at: {type: 'dateTime', nullable: false},
+        created_by: {type: 'string', maxlength: 24, nullable: false},
+        updated_at: {type: 'dateTime', nullable: true},
+        updated_by: {type: 'string', maxlength: 24, nullable: true}
+    },
+    vehicle_reviews: {
+        id: {type: 'string', maxlength: 24, nullable: false, primary: true},
+        vehicle_id: {type: 'string', maxlength: 24, nullable: false, references: 'vehicles.id', cascadeDelete: true},
+        member_id: {type: 'string', maxlength: 24, nullable: false, references: 'members.id'},
+        reservation_id: {type: 'string', maxlength: 24, nullable: true, references: 'vehicle_reservations.id'},
+        rating: {type: 'integer', nullable: false, unsigned: true},
+        comment: {type: 'text', maxlength: 65535, nullable: true},
+        created_at: {type: 'dateTime', nullable: false},
+        updated_at: {type: 'dateTime', nullable: true}
     }
 };

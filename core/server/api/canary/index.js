@@ -169,5 +169,26 @@ module.exports = {
 
     get authorsPublic() {
         return shared.pipeline(require('./authors-public'), localUtils, 'content');
+    },
+
+    // ## Vehicles (Car Rental)
+    get vehicles() {
+        return shared.pipeline(require('./vehicles'), localUtils);
+    },
+
+    get vehicleCategories() {
+        return shared.pipeline(require('./vehicle-categories'), localUtils);
+    },
+
+    get vehicleReservations() {
+        return shared.pipeline(require('./vehicle-reservations'), localUtils);
+    },
+
+    get vehicleAnalytics() {
+        return shared.pipeline(require('./vehicle-analytics'), localUtils);
+    },
+
+    get vehiclesPublic() {
+        return shared.pipeline(require('./vehicles-public'), localUtils, 'content');
     }
 };

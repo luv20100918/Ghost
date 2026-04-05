@@ -262,5 +262,31 @@ module.exports = function apiRoutes() {
     router.put('/snippets/:id', mw.authAdminApi, http(apiCanary.snippets.edit));
     router.del('/snippets/:id', mw.authAdminApi, http(apiCanary.snippets.destroy));
 
+    // ## Vehicles (Car Rental)
+    router.get('/vehicles', mw.authAdminApi, http(apiCanary.vehicles.browse));
+    router.post('/vehicles', mw.authAdminApi, http(apiCanary.vehicles.add));
+    router.get('/vehicles/:id', mw.authAdminApi, http(apiCanary.vehicles.read));
+    router.get('/vehicles/slug/:slug', mw.authAdminApi, http(apiCanary.vehicles.read));
+    router.put('/vehicles/:id', mw.authAdminApi, http(apiCanary.vehicles.edit));
+    router.del('/vehicles/:id', mw.authAdminApi, http(apiCanary.vehicles.destroy));
+
+    // ## Vehicle Categories
+    router.get('/vehicle-categories', mw.authAdminApi, http(apiCanary.vehicleCategories.browse));
+    router.post('/vehicle-categories', mw.authAdminApi, http(apiCanary.vehicleCategories.add));
+    router.get('/vehicle-categories/:id', mw.authAdminApi, http(apiCanary.vehicleCategories.read));
+    router.put('/vehicle-categories/:id', mw.authAdminApi, http(apiCanary.vehicleCategories.edit));
+    router.del('/vehicle-categories/:id', mw.authAdminApi, http(apiCanary.vehicleCategories.destroy));
+
+    // ## Vehicle Reservations
+    router.get('/vehicle-reservations', mw.authAdminApi, http(apiCanary.vehicleReservations.browse));
+    router.post('/vehicle-reservations', mw.authAdminApi, http(apiCanary.vehicleReservations.add));
+    router.get('/vehicle-reservations/:id', mw.authAdminApi, http(apiCanary.vehicleReservations.read));
+    router.put('/vehicle-reservations/:id', mw.authAdminApi, http(apiCanary.vehicleReservations.edit));
+    router.del('/vehicle-reservations/:id', mw.authAdminApi, http(apiCanary.vehicleReservations.destroy));
+
+    // ## Vehicle Analytics
+    router.get('/vehicle-analytics/stats', mw.authAdminApi, http(apiCanary.vehicleAnalytics.stats));
+    router.get('/vehicle-analytics/revenue', mw.authAdminApi, http(apiCanary.vehicleAnalytics.revenue));
+
     return router;
 };

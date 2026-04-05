@@ -43,6 +43,12 @@ const models = [
     'label',
     'single-use-token',
     'snippet',
+    'vehicle-category',
+    'vehicle',
+    'vehicle-reservation',
+    'vehicle-reservation-event',
+    'vehicle-pricing-rule',
+    'vehicle-review',
     // Action model MUST be loaded last as it loops through all of the registered models
     // Please do not append items to this array.
     'action'
